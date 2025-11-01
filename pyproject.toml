@@ -1,0 +1,24 @@
+[project]
+name = "Quantitative-Portfolio-Backtester"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "JoshuaKoeck", email = "joshua.koeck@stud.tu-darmstadt.de"},
+]
+dependencies = [
+    "streamlit",
+    "yfinance",
+    "watchdog",
+    "pandas",
+    "plotly",
+]
+
+requires-python = "==3.12.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+start = { cmd = "streamlit run web/main.py", env = { PYTHONPATH = "." } }
