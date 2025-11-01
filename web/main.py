@@ -1,9 +1,10 @@
 import streamlit as st
+import re
 import datetime
 from utils import data
+from strategies.momentum import MomentumStrategy
 from strategies.moving_average import MovingAverageStrategy
-from strategies.momentum import Momentum
-import re
+from strategies.bollinger_bands import BollingerBandsStrategy
 
 st.set_page_config(layout="wide")
 st.title("Quantitative Portfolio Backtester")
@@ -19,7 +20,7 @@ run = False
 stock_exists = False
 
 # edit this list to add new strategies
-strategies = [MovingAverageStrategy, Momentum]
+strategies = [MovingAverageStrategy, MomentumStrategy, BollingerBandsStrategy]
 strategy_name = None
 strategy_names = [" ".join(re.findall("[A-Z][a-z]*", s.__name__)) for s in strategies]
 strategy_class = None
@@ -66,16 +67,6 @@ if (
         start_date,
         end_date,
     )
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader(
-            f"Historical Data for {stock_symbol} from {start_date} to {end_date}"
-        )
-        st.write(
-            "The below graph shows the historical data from Yahoo Fiance for the selected stock and date range."
-        )
-
-        st.line_chart(data.close)
-    with col2:
-        strategy = strategy_class(data, st)
-        strategy.execute()
+    st.markdown("<hr/>", unsafe_allow_html=True)
+    strategy = strategy_class(data, st)
+    strategy.execute()

@@ -4,7 +4,7 @@ from .strategy import Strategy
 from typing import Any
 
 
-class Momentum(Strategy):
+class MomentumStrategy(Strategy):
     def __init__(self, data: pd.DataFrame, st: Any):
         self.name = "Momentum Strategy"
         self.lookback_window = 20
@@ -90,4 +90,4 @@ class Momentum(Strategy):
             legend_title="Legend",
         )
 
-        self.st.plotly_chart(fig, use_container_width=True)
+        self.st.plotly_chart(fig)
