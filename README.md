@@ -1,4 +1,4 @@
-Quantitative Portfolio Backtester is a simple yet powerful web application designed to test and evaluate investment strategies against historical market data. You can try the application online at: https://quantitative-portfolio-backtester.fly.dev/
+Quantitative Portfolio Backtester is a simple yet powerful web application designed to test and evaluate investment strategies against historical market data. You can try the application online at: https://quantitative-portfolio-backtester.fly.dev/ (this might take a second, as a new machine might cold-start)
 
 Alternatively, you can run it locally on your computer by following the instructions below.
 
