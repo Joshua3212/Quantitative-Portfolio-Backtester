@@ -1,8 +1,8 @@
-FROM python:3.19
+FROM python:3.12-slim
 
 COPY . /app
 WORKDIR /app
 
-RUN pdm install
+RUN pip3 install pdm && pdm install --prod
 
 CMD ["pdm", "run", "start"]

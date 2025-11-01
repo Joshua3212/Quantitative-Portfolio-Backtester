@@ -22,5 +22,5 @@ license = {text = "MIT"}
 distribution = false
 
 [tool.pdm.scripts]
-start = { cmd = "streamlit run web/main.py --server.port 80", env = { PYTHONPATH = "." } }
+start = { cmd = "streamlit run web/main.py --server.port $PORT --server.address 0.0.0.0", env = { PYTHONPATH = "." } }
 dev = { cmd = "streamlit run web/main.py", env = { PYTHONPATH = "." } }
