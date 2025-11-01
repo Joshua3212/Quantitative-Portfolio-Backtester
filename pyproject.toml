@@ -1,5 +1,6 @@
 [project]
 name = "Quantitative-Portfolio-Backtester"
+package-mode = false
 version = "0.1.0"
 description = "Default template for PDM package"
 authors = [
