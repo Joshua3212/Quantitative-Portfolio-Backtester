@@ -6,6 +6,9 @@ from strategies.momentum import MomentumStrategy
 from strategies.moving_average import MovingAverageStrategy
 from strategies.bollinger_bands import BollingerBandsStrategy
 
+st.set_page_config(
+    page_title="Quantitative Portfolio Backtester", layout="wide", page_icon="📈"
+)
 st.set_page_config(layout="wide")
 st.title("Quantitative Portfolio Backtester")
 st.write("Welcome to the Quantitative Portfolio Backtester web application!")

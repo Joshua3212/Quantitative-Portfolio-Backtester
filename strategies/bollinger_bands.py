@@ -8,40 +8,58 @@ class BollingerBandsStrategy(Strategy):
     def __init__(self, data: pd.DataFrame, st: Any):
         self.name = "Bollinger Band Strategy"
         self.window = 20
+        self.multiple = 2.0
         self.data = data
         self.st = st
         self.signals = pd.DataFrame(index=self.data.index)
 
     def execute(self):
         self.st.subheader("Bollinger Band Strategy")
-        self.st.warning(
-            "Bollinger Bands strategy is still in the works. (and doesn't work correctly yet)"
-        )
+
         self.st.write(
             "Bollinger band strategy uses moving averages and standard deviations to create upper and lower bands. Buy signals are generated when the price crosses below the lower band, and sell signals are generated when the price crosses above the upper band."
         )
 
-        self.short_window = self.st.number_input(
-            "Average Window (days):",
-            min_value=1,
-            value=self.window,
-        )
+        col1, col2 = self.st.columns(2)
+        with col1:
+            self.short_window = self.st.number_input(
+                "Average Window (days):",
+                min_value=1,
+                value=self.window,
+            )
 
+        with col2:
+            self.multiple = self.st.number_input(
+                "Standard Deviation Multiple:",
+                min_value=0.1,
+                value=self.multiple,
+                step=0.1,
+            )
         self.run_algorithm()
         self.generate_plotly()
 
     def run_algorithm(self):
         self.signals["close"] = self.data["close"]
 
+        # new implementation
+        self.signals["middle"] = self.data["close"].rolling(window=self.window).mean()
+        self.signals["std"] = (
+            self.data["close"].rolling(window=self.window).std()
+        )  # std calculates the rolling standard deviation
+        self.signals["high"] = self.signals["middle"] + (
+            self.signals["std"] * self.multiple
+        )
+        self.signals["low"] = self.signals["middle"] - (
+            self.signals["std"] * self.multiple
+        )
+
         self.signals["signal"] = 0
-        self.signals["signal"][self.window :] = [
-            1 if close < lower else -1 if close > upper else 0
-            for close, lower, upper in zip(
-                self.signals["close"][self.window :],
-                self.data["low"][self.window :],
-                self.data["high"][self.window :],
-            )
-        ]
+        self.signals["signal"][
+            self.data["close"] < self.signals["low"]
+        ] = 1  # buy signal
+        self.signals["signal"][
+            self.data["close"] > self.signals["high"]
+        ] = -1  # sell signal
 
         self.signals["signal"] = self.signals["signal"].shift(1)
 
@@ -63,7 +81,16 @@ class BollingerBandsStrategy(Strategy):
         fig.add_trace(
             go.Scatter(
                 x=self.data.index,
-                y=self.data["high"],
+                y=self.signals["middle"],
+                mode="lines",
+                name="Middle Band",
+            )
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=self.data.index,
+                y=self.signals["high"],
                 mode="lines",
                 name="Upper band",
             )
@@ -72,7 +99,7 @@ class BollingerBandsStrategy(Strategy):
         fig.add_trace(
             go.Scatter(
                 x=self.data.index,
-                y=self.data["low"],
+                y=self.signals["low"],
                 mode="lines",
                 name="Lower band",
             )
@@ -101,7 +128,7 @@ class BollingerBandsStrategy(Strategy):
         )
 
         fig.update_layout(
-            title="Moving Average Strategy Signals",
+            title="Bollinger Band Strategy Signals",
             xaxis_title="Date",
             yaxis_title="Price",
             legend_title="Legend",

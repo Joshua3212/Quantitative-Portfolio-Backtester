@@ -14,7 +14,7 @@ class MomentumStrategy(Strategy):
     def execute(self):
         self.st.subheader("Momentum Strategy Parameters")
         self.st.write(
-            "The momentum strategy uses the rate of change of closing prices to generate buy and sell signals. Change the lookback period below to generate different buy/sell signals."
+            "The momentum strategy generates buy signals when the price has increased over a specified lookback window, and sell signals when the price has decreased over that window."
         )
 
         self.lookback_window = self.st.number_input(
@@ -84,7 +84,7 @@ class MomentumStrategy(Strategy):
         )
 
         fig.update_layout(
-            title="Moving Average Strategy Signals",
+            title="Momentum Strategy Signals",
             xaxis_title="Date",
             yaxis_title="Price",
             legend_title="Legend",
