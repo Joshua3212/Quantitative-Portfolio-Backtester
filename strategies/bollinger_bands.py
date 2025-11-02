@@ -17,7 +17,7 @@ class BollingerBandsStrategy(Strategy):
         self.st.subheader("Bollinger Band Strategy")
 
         self.st.write(
-            "Bollinger band strategy uses moving averages and standard deviations to create upper and lower bands. Buy signals are generated when the price crosses below the lower band, and sell signals are generated when the price crosses above the upper band."
+            "Bollinger band strategy uses moving averages and standard deviations to create upper and lower bands. Buy signals are generated when the price crosses below the lower band, and sell signals are generated when the price crosses above the upper band. The Bollinger bands strategy only uses closing prices to generate buy and sell signals. Adjust the average window and standard deviation multiple below to see how the bands and signals change."
         )
 
         col1, col2 = self.st.columns(2)

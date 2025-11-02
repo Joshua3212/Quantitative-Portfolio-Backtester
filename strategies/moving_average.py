@@ -15,8 +15,7 @@ class MovingAverageStrategy(Strategy):
     def execute(self):
         self.st.subheader("Moving Average Strategy Parameters")
         self.st.write(
-            "The moving average strategy triggers a buy signal when the short-term moving average crosses above the long-term moving average, and a sell signal when the short-term moving average crosses below the long-term moving average."
-            " Change the short/long moving average windows below to generate different buy/sell signals."
+            "The moving average strategy triggers a buy signal when the short-term moving average crosses above the long-term moving average, and a sell signal when the short-term moving average crosses below the long-term moving average. It only uses closing prices to make calculations. Change the short/long moving average windows below to generate different buy/sell signals."
         )
         col1, col2 = self.st.columns(2)
         with col1:

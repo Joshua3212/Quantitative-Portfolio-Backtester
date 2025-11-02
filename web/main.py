@@ -5,6 +5,7 @@ from utils import data
 from strategies.momentum import MomentumStrategy
 from strategies.moving_average import MovingAverageStrategy
 from strategies.bollinger_bands import BollingerBandsStrategy
+from strategies.volume_spike import VolumeSpikeStrategy
 
 st.set_page_config(
     page_title="Quantitative Portfolio Backtester", layout="wide", page_icon="📈"
@@ -23,7 +24,12 @@ run = False
 stock_info = None
 
 # edit this list to add new strategies
-strategies = [MovingAverageStrategy, MomentumStrategy, BollingerBandsStrategy]
+strategies = [
+    MovingAverageStrategy,
+    MomentumStrategy,
+    BollingerBandsStrategy,
+    VolumeSpikeStrategy,
+]
 strategy_name = None
 strategy_names = [" ".join(re.findall("[A-Z][a-z]*", s.__name__)) for s in strategies]
 strategy_class = None
