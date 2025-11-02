@@ -20,7 +20,7 @@ col1, col2, col3 = st.columns(3)
 stock_symbol = None
 date_range = None
 run = False
-stock_exists = False
+stock_info = None
 
 # edit this list to add new strategies
 strategies = [MovingAverageStrategy, MomentumStrategy, BollingerBandsStrategy]
@@ -50,16 +50,26 @@ if not stock_symbol:
     st.info("Please enter a stock abreviation to proceed.")
 
 if stock_symbol:
-    stock_exists = data.check_if_stock_exists(stock_symbol)
-    if stock_exists:
-        st.success(f"Stock {stock_symbol} found!")
+    st.markdown("<hr/>", unsafe_allow_html=True)
+    stock_info = data.get_stock_info(stock_symbol)
+    if stock_info:
+        favicon_url = (
+            f"https://www.google.com/s2/favicons?domain={stock_info.get('website', '')}&sz=50"
+            if stock_info.get("website", "")
+            else None
+        )
+        st.markdown(
+            f"<div style='display:flex; align-items: center; gap: 8px; font-weight:bold; font-size:28px; padding-bottom:16px'> <img style='border-radius:10px' src='{favicon_url if favicon_url else 'https://placehold.co/50x50?text=Not found'}'/> {stock_info.get('longName', '')} ({stock_info['symbol']})</div>",
+            unsafe_allow_html=True,
+        )
+        st.write(stock_info.get("longBusinessSummary", ""))
     else:
         st.error(f"Stock {stock_symbol} not found. Please check the abreviation.")
 
 
 if (
     stock_symbol
-    and stock_exists
+    and stock_info != None
     and date_range
     and len(date_range) == 2
     and strategy_class

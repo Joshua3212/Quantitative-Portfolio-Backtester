@@ -3,8 +3,10 @@ import datetime
 import pandas as pd
 
 
-def check_if_stock_exists(abbreviation: str) -> bool:
-    return bool(yfinance.Ticker(abbreviation).info.get("symbol"))
+def get_stock_info(abbreviation: str) -> dict | None:
+    if bool(yfinance.Ticker(abbreviation).info.get("symbol")):
+        return yfinance.Ticker(abbreviation).info
+    return None
 
 
 def get_historical_data(
