@@ -9,12 +9,18 @@ class VolumeSpikeStrategy(Strategy):
         self.name = "Volume Spike Strategy"
         self.data = data
         self.st = st
-        self.signals = pd.DataFrame(index=self.data.index)
 
         self.window = 50
 
+        self.signals = pd.DataFrame(index=self.data.index)
+
     def execute(self):
-        self.st.subheader("Volume Spike Strategy Parameters")
+        self._render_inputs()
+        self._run_algorithm()
+        self._generate_plotly()
+
+    def _render_inputs(self):
+        self.st.subheader(self.name)
         self.st.write(
             "The volume spike strategy triggers when a sudden spike in volume is detected compared to the average volume over a specified lookback period. It uses volume data to generate buy and sell signals. Adjust the volume moving average window below to see how buy and sell signals change. To get a better view of when buy/sell signals occur click on the 'Volume MA' and 'Trading Volume' texts in the legend on the right to hide it from the plot."
         )
@@ -25,10 +31,7 @@ class VolumeSpikeStrategy(Strategy):
             value=self.window,
         )
 
-        self.run_algorithm()
-        self.generate_plotly()
-
-    def run_algorithm(self):
+    def _run_algorithm(self):
         self.signals["close"] = self.data["close"]
         self.signals["volume"] = self.data["volume"]
 
@@ -43,7 +46,7 @@ class VolumeSpikeStrategy(Strategy):
 
         self.data = self.signals
 
-    def generate_plotly(self):
+    def _generate_plotly(self):
         if self.data is None:
             raise ValueError("No data to plot. Please run the strategy first.")
 

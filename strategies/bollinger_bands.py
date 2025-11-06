@@ -7,14 +7,21 @@ from typing import Any
 class BollingerBandsStrategy(Strategy):
     def __init__(self, data: pd.DataFrame, st: Any):
         self.name = "Bollinger Band Strategy"
-        self.window = 20
-        self.multiple = 2.0
         self.data = data
         self.st = st
+
+        self.window = 20
+        self.multiple = 2.0
+
         self.signals = pd.DataFrame(index=self.data.index)
 
     def execute(self):
-        self.st.subheader("Bollinger Band Strategy")
+        self._render_inputs()
+        self._run_algorithm()
+        self._generate_plotly_chart()
+
+    def _render_inputs(self):
+        self.st.subheader(self.name)
 
         self.st.write(
             "Bollinger band strategy uses moving averages and standard deviations to create upper and lower bands. Buy signals are generated when the price crosses below the lower band, and sell signals are generated when the price crosses above the upper band. The Bollinger bands strategy only uses closing prices to generate buy and sell signals. Adjust the average window and standard deviation multiple below to see how the bands and signals change."
@@ -35,10 +42,8 @@ class BollingerBandsStrategy(Strategy):
                 value=self.multiple,
                 step=0.1,
             )
-        self.run_algorithm()
-        self.generate_plotly()
 
-    def run_algorithm(self):
+    def _run_algorithm(self):
         self.signals["close"] = self.data["close"]
 
         # new implementation
@@ -63,7 +68,7 @@ class BollingerBandsStrategy(Strategy):
 
         self.signals["signal"] = self.signals["signal"].shift(1)
 
-    def generate_plotly(self):
+    def _generate_plotly_chart(self):
         if self.data is None:
             raise ValueError("No data to plot. Please run the strategy first.")
 

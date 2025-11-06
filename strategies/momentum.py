@@ -7,12 +7,20 @@ from typing import Any
 class MomentumStrategy(Strategy):
     def __init__(self, data: pd.DataFrame, st: Any):
         self.name = "Momentum Strategy"
-        self.lookback_window = 20
         self.data = data
         self.st = st
 
+        self.lookback_window = 20
+
+        self.signals = pd.DataFrame(index=self.data.index)
+
     def execute(self):
-        self.st.subheader("Momentum Strategy Parameters")
+        self._render_inputs()
+        self._run_algorithm()
+        self._generate_plotly_chart()
+
+    def _render_inputs(self):
+        self.st.subheader(self.name)
         self.st.write(
             "The momentum strategy generates buy signals when the price has increased over a specified lookback window, and sell signals when the price has decreased over that window. It only uses closing prices to determine momentum. Adjust the lookback window below to see how buy and sell signals change."
         )
@@ -23,21 +31,17 @@ class MomentumStrategy(Strategy):
             value=self.lookback_window,
         )
 
-        self.run()
-        self.generate_plotly()
-
-    def run(self):
-        signals = pd.DataFrame(index=self.data.index)
-        signals["close"] = self.data["close"]
-        signals["momentum"] = self.data["close"].pct_change(self.lookback_window)
-        signals["signal"] = 0
-        signals["signal"][self.lookback_window :] = (
-            signals["momentum"][self.lookback_window :] > 0
+    def _run_algorithm(self):
+        self.signals["close"] = self.data["close"]
+        self.signals["momentum"] = self.data["close"].pct_change(self.lookback_window)
+        self.signals["signal"] = 0
+        self.signals["signal"][self.lookback_window :] = (
+            self.signals["momentum"][self.lookback_window :] > 0
         ).astype(int)
-        signals["signal"] = signals["signal"].diff()
-        self.data = signals
+        self.signals["signal"] = self.signals["signal"].diff()
+        self.data = self.signals
 
-    def generate_plotly(self):
+    def _generate_plotly_chart(self):
         if self.data is None:
             raise ValueError("No data to plot. Please run the strategy first.")
 
