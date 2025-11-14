@@ -1,7 +1,5 @@
-from plotly import graph_objects as go
 import pandas as pd
 from abc import abstractmethod
-import streamlit
 
 
 class Strategy:

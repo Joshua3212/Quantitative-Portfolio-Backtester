@@ -86,7 +86,7 @@ if stock_symbol:
 
 if (
     stock_symbol
-    and stock_info != None
+    and stock_info is not None
     and date_range
     and len(date_range) == 2
     and strategy_class
