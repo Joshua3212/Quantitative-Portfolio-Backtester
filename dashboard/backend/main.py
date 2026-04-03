@@ -242,8 +242,8 @@ def _run_volume_spike(data: pd.DataFrame, params: dict) -> tuple[pd.DataFrame, l
     signals["volume"] = data["volume"]
     signals["volume_ma"] = data["volume"].rolling(window).mean()
     signals["signal"] = 0
-    signals["signal"][window:] = (
-        signals["volume"][window:] > multiplier * signals["volume_ma"][window:]
+    signals.loc[signals.index[window:], "signal"] = (
+        signals["volume"].iloc[window:] > multiplier * signals["volume_ma"].iloc[window:]
     ).astype(int)
     signals["signal"] = signals["signal"].diff()
 

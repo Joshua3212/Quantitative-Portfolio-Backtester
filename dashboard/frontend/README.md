@@ -1,6 +1,6 @@
 # Frontend – Portfolio Backtester Dashboard
 
-Next.js 14 + TypeScript + Tailwind CSS + Recharts dashboard.
+Next.js 15 + TypeScript + Tailwind CSS + Recharts dashboard.
 
 ## Setup & run
 
